@@ -4,19 +4,19 @@ FROM debian:stretch as builder
 # properly setup debian sources
 ENV DEBIAN_FRONTEND noninteractive
 RUN echo "deb http://http.debian.net/debian stretch main\n\
-deb-src http://http.debian.net/debian stretch main\n\
-deb http://http.debian.net/debian stretch-updates main\n\
-deb-src http://http.debian.net/debian stretch-updates main\n\
-deb http://security.debian.org stretch/updates main\n\
-deb-src http://security.debian.org stretch/updates main\n\
-" > /etc/apt/sources.list
+	deb-src http://http.debian.net/debian stretch main\n\
+	deb http://http.debian.net/debian stretch-updates main\n\
+	deb-src http://http.debian.net/debian stretch-updates main\n\
+	deb http://security.debian.org stretch/updates main\n\
+	deb-src http://security.debian.org stretch/updates main\n\
+	" > /etc/apt/sources.list
 
 # install package building helpers
 # rsyslog for logging (ref https://github.com/stilliard/docker-pure-ftpd/issues/17)
 RUN apt-get -y update && \
 	apt-get -y --force-yes --fix-missing install dpkg-dev debhelper &&\
 	apt-get -y build-dep pure-ftpd
-	
+
 
 # Build from source - we need to remove the need for CAP_SYS_NICE and CAP_DAC_READ_SEARCH
 RUN mkdir /tmp/pure-ftpd/ && \
@@ -81,4 +81,4 @@ VOLUME ["/home/ftpusers", "/etc/pure-ftpd/passwd"]
 # startup
 CMD /run.sh -l puredb:/etc/pure-ftpd/pureftpd.pdb -E -j -R -P $PUBLICHOST
 
-EXPOSE 21 30000-30009
+EXPOSE 21 30000-30003
